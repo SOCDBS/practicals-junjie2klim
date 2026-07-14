@@ -16,6 +16,7 @@ model course {
   labFee    Decimal? @map("lab_fee") @db.Decimal(7, 2)
 
   department department @relation(fields: [offeredBy], references: [deptCode], onDelete: NoAction, onUpdate: NoAction, map: "fk_course_offered_by")
+  student    student[]
 }
 
 model department {
@@ -130,9 +131,10 @@ model preRequisite {
 }
 
 model country {
-  countryName String @id @map("country_name") @db.VarChar(30)
-  language    String @db.VarChar(30)
-  region      String @db.VarChar(30)
+  countryName String    @id @map("country_name") @db.VarChar(30)
+  language    String    @db.VarChar(30)
+  region      String    @db.VarChar(30)
+  student     student[]
 }
 
 model student {
@@ -145,6 +147,10 @@ model student {
   dob         DateTime @db.Date
   nationality String   @db.VarChar(30)
   crseCode    String   @map("crse_code") @db.VarChar(5)
+
+  course course @relation(fields: [crseCode], references: [crseCode], onDelete: NoAction, onUpdate: NoAction, map: "student_crse_code_fk")
+
+  country country @relation(fields: [nationality], references: [countryName], onDelete: NoAction, onUpdate: NoAction, map: "student_nationality_fk")
 }
 
 model studModPerformance {
