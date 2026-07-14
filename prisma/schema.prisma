@@ -14,6 +14,8 @@ model course {
   offeredBy String   @map("offered_by") @db.VarChar(5)
   crseFee   Decimal  @map("crse_fee") @db.Decimal(7, 2)
   labFee    Decimal? @map("lab_fee") @db.Decimal(7, 2)
+
+  department department @relation(fields: [offeredBy], references: [deptCode], onDelete: NoAction, onUpdate: NoAction, map: "fk_course_offered_by")
 }
 
 model department {
@@ -29,6 +31,8 @@ model department {
   departmentHodToStaff staff @relation("departmentHodToStaff", fields: [hod], references: [staffNo], onDelete: NoAction, onUpdate: NoAction, map: "dept_hod_fk")
 
   staffDeptCodeToDepartment staff[] @relation("staffDeptCodeToDepartment")
+
+  course course[]
 }
 
 model staff {
