@@ -104,8 +104,9 @@ model module {
   creditUnit Int     @map("credit_unit")
   modCoord   String? @map("mod_coord") @db.Char(4)
 
-  preRequisiteModCode   preRequisite[] @relation("preRequisiteModCodeToModule")
-  preRequisiteRequisite preRequisite[] @relation("preRequisiteRequisiteToModule")
+  preRequisiteModCode   preRequisite[]       @relation("preRequisiteModCodeToModule")
+  preRequisiteRequisite preRequisite[]       @relation("preRequisiteRequisiteToModule")
+  studModPerformance    studModPerformance[]
 }
 
 model staffDependent {
@@ -151,6 +152,8 @@ model student {
   course course @relation(fields: [crseCode], references: [crseCode], onDelete: NoAction, onUpdate: NoAction, map: "student_crse_code_fk")
 
   country country @relation(fields: [nationality], references: [countryName], onDelete: NoAction, onUpdate: NoAction, map: "student_nationality_fk")
+
+  studModPerformance studModPerformance[]
 }
 
 model studModPerformance {
@@ -158,6 +161,10 @@ model studModPerformance {
   modRegistered String @map("mod_registered") @db.VarChar(10)
   mark          Int
   grade         String @db.Char(2)
+
+  student student @relation(fields: [admNo], references: [admNo], onDelete: NoAction, onUpdate: NoAction, map: "stud_mod_performance_adm_no_fk")
+
+  module module @relation(fields: [modRegistered], references: [modCode], onDelete: NoAction, onUpdate: NoAction, map: "stud_mod_performance_mod_registered_fk")
 
   @@id([admNo, modRegistered])
   @@map("stud_mod_performance")
