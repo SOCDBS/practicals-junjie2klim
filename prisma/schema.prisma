@@ -102,6 +102,9 @@ model module {
   modName    String  @map("mod_name") @db.VarChar(100)
   creditUnit Int     @map("credit_unit")
   modCoord   String? @map("mod_coord") @db.Char(4)
+
+  preRequisiteModCode   preRequisite[] @relation("preRequisiteModCodeToModule")
+  preRequisiteRequisite preRequisite[] @relation("preRequisiteRequisiteToModule")
 }
 
 model staffDependent {
@@ -117,6 +120,10 @@ model staffDependent {
 model preRequisite {
   modCode   String @map("mod_code") @db.VarChar(10)
   requisite String @db.VarChar(10)
+
+  moduleByModCode module @relation("preRequisiteModCodeToModule", fields: [modCode], references: [modCode], onDelete: NoAction, onUpdate: NoAction, map: "pre_requisite_mod_code_fk")
+
+  moduleByRequisite module @relation("preRequisiteRequisiteToModule", fields: [requisite], references: [modCode], onDelete: NoAction, onUpdate: NoAction, map: "pre_requisite_requisite_fk")
 
   @@id([modCode, requisite])
   @@map("pre_requisite")
